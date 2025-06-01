@@ -1,7 +1,7 @@
 plugins {
-    kotlin("jvm")
-    application
+    kotlin("jvm") apply false
 }
+
 object Conf {
     const val GROUP = "net.kigawa"
     const val VERSION = "1.0.0"
@@ -13,6 +13,15 @@ allprojects {
     group = Conf.GROUP
     version = Conf.VERSION
 }
-application {
-    mainClass.set("net.kigawa.fomage.Main")
-}
+//group = "net.kigawa"
+//version = "1.0.0"
+//allprojects {
+//    group = "net.kigawa"
+//    version = "1.0.0"
+//    plugins {
+//        id("fomage.common")
+//    }
+//}
+//repositories {
+//    mavenCentral()
+//}

@@ -1,10 +1,15 @@
 plugins {
     `kotlin-dsl`
 }
-fun DependencyHandler.plugin(pluginName: String, version: String) {
-    implementation("$pluginName:$pluginName.gradle.plugin:$version")
-}
 
+//val kotlinVersion = "2.1.10"
+fun pluginId(pluginName: String, version: String) = "$pluginName:$pluginName.gradle.plugin:$version"
+//fun kotlinPluginId(pluginName: String) = pluginId("org.jetbrains.kotlin.$pluginName", kotlinVersion)
+//fun kotlinId(id: String) = "org.jetbrains.kotlin:$id:$kotlinVersion"
 dependencies {
-    plugin("org.jetbrains.kotlin.jvm", "2.1.0")
+//    implementation(kotlinPluginId("jvm"))
+    implementation(pluginId("org.jetbrains.kotlin.jvm", "2.1.10"))
+}
+repositories {
+    mavenCentral()
 }

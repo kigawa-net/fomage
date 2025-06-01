@@ -1,5 +1,5 @@
 [versions]
-kotlin-version = "2.1.0"
+kotlin-version = "2.1.10"
 coroutines-version = "1.9.0"
 coroutines-test-version = "1.10.1"
 datetime-version = "0.6.1"
@@ -12,6 +12,7 @@ logback-version="1.5.17"
 shadow-version="8.1.1"
 
 [libraries]
+kotlin-jvm = { module = "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "kotlin-version" }
 kotlin-stdlib-js = { module = "org.jetbrains.kotlin:kotlin-stdlib-js", version.ref = "kotlin-version" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin-version" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin-version" }
@@ -19,7 +20,6 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines-test-version" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime-version" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin-version" }
-nexus-publish = { module = "io.github.gradle-nexus.publish-plugin:io.github.gradle-nexus.publish-plugin.gradle.plugin", version.ref = "nexus-publish" }
 mongodb-driver = { module = "org.mongodb:mongodb-driver-kotlin-coroutine", version.ref = "mongodb-version" }
 mongodb-bson = { module = "org.mongodb:bson-kotlinx", version.ref = "mongodb-version" }
 dotenv = { module = "io.github.cdimascio:dotenv-kotlin", version.ref = "dotenv-version" }
@@ -27,8 +27,8 @@ logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback-ve
 
 
 [plugins]
-sonatype-central-upload = { id = "cl.franciscosolis.sonatype-central-upload", version = "1.0.3" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
+sonatype-central-upload = { id = "cl.franciscosolis.sonatype-central-upload", version = "1.0.3" }
 vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech-maven-publish" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow-version" }

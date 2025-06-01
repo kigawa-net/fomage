@@ -1,7 +1,8 @@
-
-kotlin {
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    compilerOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-    }
+plugins {
+    kotlin("jvm")
 }
+//kotlin {
+//    compilerOptions {
+//        freeCompilerArgs = listOf("-Xjsr305=strict")
+//    }
+//}
