@@ -1,1 +1,4 @@
-plugins {}
+plugins {
+    id("fomage.common")
+    application
+}

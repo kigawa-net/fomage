@@ -1,5 +1,10 @@
 package net.kigawa.fomage
 
+import net.kigawa.fomage.api.DataManagerApi
+import net.kigawa.fomage.api.MonitoringManagerApi
+import net.kigawa.fomage.api.SchemaManagerApi
+import net.kigawa.fomage.api.TaskManagerApi
+
 /**
  * Main entry point for the Fomage application.
  * Fomage is a web-based management tool for MongoDB databases used by the fonsole application.
@@ -43,7 +48,7 @@ object Main {
     /**
      * Initializes the data manager component.
      */
-    private fun initDataManager(mongoClient: Any): DataManager {
+    private fun initDataManager(mongoClient: Any): DataManagerApi {
         println("Initializing Data Manager")
         return DataManager(mongoClient)
     }
@@ -51,7 +56,7 @@ object Main {
     /**
      * Initializes the schema manager component.
      */
-    private fun initSchemaManager(mongoClient: Any): SchemaManager {
+    private fun initSchemaManager(mongoClient: Any): SchemaManagerApi {
         println("Initializing Schema Manager")
         return SchemaManager(mongoClient)
     }
@@ -59,7 +64,7 @@ object Main {
     /**
      * Initializes the task manager component.
      */
-    private fun initTaskManager(mongoClient: Any): TaskManager {
+    private fun initTaskManager(mongoClient: Any): TaskManagerApi {
         println("Initializing Task Manager")
         return TaskManager(mongoClient)
     }
@@ -67,7 +72,7 @@ object Main {
     /**
      * Initializes the monitoring manager component.
      */
-    private fun initMonitoringManager(mongoClient: Any): MonitoringManager {
+    private fun initMonitoringManager(mongoClient: Any): MonitoringManagerApi {
         println("Initializing Monitoring Manager")
         return MonitoringManager(mongoClient)
     }
@@ -76,10 +81,10 @@ object Main {
      * Starts the web server for the Fomage application.
      */
     private fun startWebServer(
-        dataManager: DataManager,
-        schemaManager: SchemaManager,
-        taskManager: TaskManager,
-        monitoringManager: MonitoringManager
+        dataManager: DataManagerApi,
+        schemaManager: SchemaManagerApi,
+        taskManager: TaskManagerApi,
+        monitoringManager: MonitoringManagerApi
     ) {
         println("Starting web server")
         // TODO: Implement web server
@@ -119,11 +124,11 @@ class DummyCollection(private val name: String) {
 /**
  * Manages data viewing and editing functionality.
  */
-class DataManager(private val mongoClient: Any) {
+class DataManager(private val mongoClient: Any) : DataManagerApi {
     /**
      * Lists all databases in the MongoDB instance.
      */
-    fun listDatabases(): List<String> {
+    override fun listDatabases(): List<String> {
         // TODO: Implement database listing
         return listOf("fonsole", "admin", "local")
     }
@@ -131,7 +136,7 @@ class DataManager(private val mongoClient: Any) {
     /**
      * Lists all collections in a database.
      */
-    fun listCollections(database: String): List<String> {
+    override fun listCollections(database: String): List<String> {
         // TODO: Implement collection listing
         return listOf("backups", "projects", "users")
     }
@@ -139,7 +144,7 @@ class DataManager(private val mongoClient: Any) {
     /**
      * Finds documents in a collection.
      */
-    fun findDocuments(database: String, collection: String): List<Map<String, Any>> {
+    override fun findDocuments(database: String, collection: String): List<Map<String, Any>> {
         // TODO: Implement document finding
         return (mongoClient as DummyMongoClient)
             .getDatabase(database)
@@ -151,11 +156,11 @@ class DataManager(private val mongoClient: Any) {
 /**
  * Manages schema retrieval and display functionality.
  */
-class SchemaManager(private val mongoClient: Any) {
+class SchemaManager(private val mongoClient: Any) : SchemaManagerApi {
     /**
      * Gets the schema for a collection.
      */
-    fun getSchema(database: String, collection: String): Map<String, String> {
+    override fun getSchema(database: String, collection: String): Map<String, String> {
         // TODO: Implement schema retrieval
         return mapOf(
             "_id" to "ObjectId",
@@ -168,11 +173,11 @@ class SchemaManager(private val mongoClient: Any) {
 /**
  * Manages automated operational tasks.
  */
-class TaskManager(private val mongoClient: Any) {
+class TaskManager(private val mongoClient: Any) : TaskManagerApi {
     /**
      * Schedules a data cleanup task.
      */
-    fun scheduleCleanup(database: String, collection: String, olderThan: Int): String {
+    override fun scheduleCleanup(database: String, collection: String, olderThan: Int): String {
         // TODO: Implement task scheduling
         return "cleanup-${System.currentTimeMillis()}"
     }
@@ -180,7 +185,7 @@ class TaskManager(private val mongoClient: Any) {
     /**
      * Creates indexes for a collection.
      */
-    fun createIndexes(database: String, collection: String, fields: List<String>): List<String> {
+    override fun createIndexes(database: String, collection: String, fields: List<String>): List<String> {
         // TODO: Implement index creation
         return fields.map { "${collection}_${it}_idx" }
     }
@@ -189,11 +194,11 @@ class TaskManager(private val mongoClient: Any) {
 /**
  * Manages database performance monitoring and alerting.
  */
-class MonitoringManager(private val mongoClient: Any) {
+class MonitoringManager(private val mongoClient: Any) : MonitoringManagerApi {
     /**
      * Gets performance metrics for a database.
      */
-    fun getMetrics(database: String): Map<String, Double> {
+    override fun getMetrics(database: String): Map<String, Double> {
         // TODO: Implement metrics retrieval
         return mapOf(
             "queryTime" to 1.5,
@@ -205,7 +210,7 @@ class MonitoringManager(private val mongoClient: Any) {
     /**
      * Sets up an alert for a metric.
      */
-    fun setupAlert(metric: String, threshold: Double): String {
+    override fun setupAlert(metric: String, threshold: Double): String {
         // TODO: Implement alert setup
         return "alert-${metric}-${System.currentTimeMillis()}"
     }

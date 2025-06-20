@@ -1,7 +1,15 @@
 
+import org.gradle.kotlin.dsl.kotlin
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+
+plugins {
+    kotlin("jvm")
+}
+
 kotlin {
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    jvmToolchain(17)
+
     compilerOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
+        freeCompilerArgs.add("-Xjsr305=strict")
     }
 }
