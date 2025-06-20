@@ -40,5 +40,5 @@ dependencies {
 }
 
 application {
-    mainClass.set("net.kigawa.fomage.FomageApplication")
+    mainClass.set("net.kigawa.fomage.FomageApplicationKt")
 }

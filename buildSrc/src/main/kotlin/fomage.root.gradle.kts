@@ -1,3 +1,5 @@
+import gradle.kotlin.dsl.accessors._8afd1ed6040836139df3e5fc6cc50a92.application
+
 plugins {
     kotlin("jvm")
 }
