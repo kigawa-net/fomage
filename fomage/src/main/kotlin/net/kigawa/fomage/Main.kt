@@ -406,6 +406,10 @@ class DummyCollection(private val name: String) {
             mapOf("_id" to "2", "name" to "Document 2")
         )
     }
+
+    fun findById(id: String): Map<String, Any>? {
+        return find().find { it["_id"] == id }
+    }
 }
 
 /**
@@ -439,6 +443,32 @@ class DataManager(private val mongoClient: Any) : DataManagerApi {
             .find()
 
         return rawDocuments.map { rawDoc ->
+            val doc = GenericDocument()
+            doc.id = rawDoc["_id"]?.toString()
+            doc.collection = collection
+            doc.data = rawDoc
+            doc.createdAt = java.time.Instant.now()
+            doc.updatedAt = java.time.Instant.now()
+            doc
+        }
+    }
+
+    /**
+     * Finds a document by ID.
+     * 
+     * @param database The database name
+     * @param collection The collection name
+     * @param id The document ID
+     * @return The document if found, null otherwise
+     */
+    override fun findDocumentById(database: String, collection: String, id: String): GenericDocument? {
+        // TODO: Implement document finding by ID
+        val rawDocument = (mongoClient as DummyMongoClient)
+            .getDatabase(database)
+            .getCollection(collection)
+            .findById(id)
+
+        return rawDocument?.let { rawDoc ->
             val doc = GenericDocument()
             doc.id = rawDoc["_id"]?.toString()
             doc.collection = collection
@@ -499,6 +529,145 @@ class DataManager(private val mongoClient: Any) : DataManagerApi {
                 updatedAt = java.time.Instant.now()
             }
         )
+    }
+
+    /**
+     * Creates a new document.
+     * 
+     * @param database The database name
+     * @param collection The collection name
+     * @param document The document to create
+     * @return The created document
+     */
+    override fun createDocument(database: String, collection: String, document: GenericDocument): GenericDocument {
+        // TODO: Implement document creation
+        document.id = java.util.UUID.randomUUID().toString()
+        document.createdAt = java.time.Instant.now()
+        document.updatedAt = java.time.Instant.now()
+        return document
+    }
+
+    /**
+     * Updates an existing document.
+     * 
+     * @param database The database name
+     * @param collection The collection name
+     * @param id The document ID
+     * @param document The updated document
+     * @return The updated document
+     */
+    override fun updateDocument(database: String, collection: String, id: String, document: GenericDocument): GenericDocument {
+        // TODO: Implement document update
+        document.id = id
+        document.updatedAt = java.time.Instant.now()
+        return document
+    }
+
+    /**
+     * Deletes a document.
+     * 
+     * @param database The database name
+     * @param collection The collection name
+     * @param id The document ID
+     */
+    override fun deleteDocument(database: String, collection: String, id: String) {
+        // TODO: Implement document deletion
+    }
+
+    /**
+     * Finds a user by ID.
+     * 
+     * @param id The user ID
+     * @return The user if found, null otherwise
+     */
+    override fun findUserById(id: String): User? {
+        // TODO: Implement user finding by ID
+        return findAllUsers().find { it.id == id }
+    }
+
+    /**
+     * Creates a new user.
+     * 
+     * @param user The user to create
+     * @return The created user
+     */
+    override fun createUser(user: User): User {
+        // TODO: Implement user creation
+        user.id = java.util.UUID.randomUUID().toString()
+        user.createdAt = java.time.Instant.now()
+        user.updatedAt = java.time.Instant.now()
+        return user
+    }
+
+    /**
+     * Updates an existing user.
+     * 
+     * @param id The user ID
+     * @param user The updated user
+     * @return The updated user
+     */
+    override fun updateUser(id: String, user: User): User {
+        // TODO: Implement user update
+        user.id = id
+        user.updatedAt = java.time.Instant.now()
+        return user
+    }
+
+    /**
+     * Deletes a user.
+     * 
+     * @param id The user ID
+     */
+    override fun deleteUser(id: String) {
+        // TODO: Implement user deletion
+    }
+
+    /**
+     * Finds a data document by ID.
+     * 
+     * @param id The data ID
+     * @return The data document if found, null otherwise
+     */
+    override fun findDataById(id: String): Data? {
+        // TODO: Implement data finding by ID
+        return findAllData().find { it.id == id }
+    }
+
+    /**
+     * Creates a new data document.
+     * 
+     * @param data The data document to create
+     * @return The created data document
+     */
+    override fun createData(data: Data): Data {
+        // TODO: Implement data creation
+        data.id = java.util.UUID.randomUUID().toString()
+        data.createdAt = java.time.Instant.now()
+        data.updatedAt = java.time.Instant.now()
+        return data
+    }
+
+    /**
+     * Updates an existing data document.
+     * 
+     * @param id The data ID
+     * @param data The updated data document
+     * @return The updated data document
+     */
+    override fun updateData(id: String, data: Data): Data {
+        // TODO: Implement data update
+        data.id = id
+        data.updatedAt = java.time.Instant.now()
+        return data
+    }
+
+    /**
+     * Deletes a data document.
+     * 
+     * @param id The data ID
+     */
+    override fun deleteData(id: String) {
+        // TODO: Implement data deletion
     }
 }
 

@@ -20,6 +20,7 @@ dependencies {
 
     // Spring Boot
     implementation(libs.spring.boot.starter)
+    implementation(libs.spring.boot.starter.security)
 
     // MongoDB
     implementation(libs.mongodb.driver)

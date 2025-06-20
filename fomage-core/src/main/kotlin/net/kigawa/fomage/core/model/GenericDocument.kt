@@ -12,9 +12,9 @@ import java.time.Instant
 class GenericDocument {
     @Id
     var id: String? = null
-    
+
     var collection: String? = null
-    var data: Map<String, Any> = mutableMapOf()
+    var data: Map<String, Any?> = mutableMapOf()
     var createdAt: Instant? = null
     var updatedAt: Instant? = null
 }
