@@ -5,76 +5,183 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
-        h1 { color: #2c3e50; }
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
-        tr:hover { background-color: #f1f1f1; }
-        a { color: #3498db; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        pre { white-space: pre-wrap; word-wrap: break-word; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-info span {
+            margin-right: 1rem;
+        }
+        .user-info a {
+            color: #e74c3c;
+            text-decoration: none;
+        }
+        .user-info a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin-top: 20px; 
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 8px; 
+            text-align: left; 
+        }
+        th { 
+            background-color: #f2f2f2; 
+        }
+        tr:nth-child(even) { 
+            background-color: #f9f9f9; 
+        }
+        tr:hover { 
+            background-color: #f1f1f1; 
+        }
+        a { 
+            color: #3498db; 
+            text-decoration: none; 
+        }
+        a:hover { 
+            text-decoration: underline; 
+        }
+        pre { 
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+        }
+        .nav-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .nav-link {
+            display: block;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            text-align: center;
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .nav-link:hover {
+            transform: translateY(-5px);
+        }
+        .breadcrumb {
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
-    <h1 th:text="'Documents in ' + ${collection}"></h1>
+    <div class="container">
+        <div class="header">
+            <h1 th:text="'Documents in ' + ${collection}"></h1>
+            <div class="user-info">
+                <span th:text="${'Welcome, ' + username}">Welcome, User</span>
+                <a th:href="@{/logout}">Logout</a>
+            </div>
+        </div>
 
-    <!-- Display documents in a table -->
-    <table th:if="${not #lists.isEmpty(documents)}">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <!-- Special columns for projects collection -->
-                <th th:if="${collection == 'projects'}">Name</th>
-                <th th:if="${collection == 'projects'}">Backup IDs</th>
+        <div class="nav-links">
+            <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+            <a class="nav-link" th:href="@{/}">Database List</a>
+            <a class="nav-link" th:href="@{/users}">User Management</a>
+            <a class="nav-link" th:href="@{/data}">Data Management</a>
+        </div>
 
-                <!-- Special columns for backups collection -->
-                <th th:if="${collection == 'backups'}">Start Date</th>
-                <th th:if="${collection == 'backups'}">End Date</th>
-                <th th:if="${collection == 'backups'}">Remove Request</th>
+        <div class="breadcrumb">
+            <a th:href="@{/}">Databases</a> &gt; 
+            <a th:href="@{/collections(database=${database})}" th:text="${database}"></a> &gt; 
+            <span th:text="${collection}"></span>
+        </div>
 
-                <!-- Special columns for fs.files collection (GridFS) -->
-                <th th:if="${collection == 'fs.files'}">Filename</th>
-                <th th:if="${collection == 'fs.files'}">Length</th>
-                <th th:if="${collection == 'fs.files'}">Upload Date</th>
+        <div class="content">
+            <!-- Display documents in a table -->
+            <table th:if="${not #lists.isEmpty(documents)}">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <!-- Special columns for projects collection -->
+                        <th th:if="${collection == 'projects'}">Name</th>
+                        <th th:if="${collection == 'projects'}">Backup IDs</th>
 
-                <!-- For other collections or generic fields -->
-                <th th:if="${collection != 'projects' && collection != 'backups' && collection != 'fs.files'}">Data</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="doc : ${documents}">
-                <td th:text="${doc.id}"></td>
+                        <!-- Special columns for backups collection -->
+                        <th th:if="${collection == 'backups'}">Start Date</th>
+                        <th th:if="${collection == 'backups'}">End Date</th>
+                        <th th:if="${collection == 'backups'}">Remove Request</th>
 
-                <!-- Special handling for projects collection -->
-                <td th:if="${collection == 'projects'}" th:text="${doc.data.get('name')}"></td>
-                <td th:if="${collection == 'projects'}">
-                    <ul th:if="${doc.data.get('backupIds') != null}">
-                        <li th:each="backupId : ${doc.data.get('backupIds')}" th:text="${backupId}"></li>
-                    </ul>
-                </td>
+                        <!-- Special columns for fs.files collection (GridFS) -->
+                        <th th:if="${collection == 'fs.files'}">Filename</th>
+                        <th th:if="${collection == 'fs.files'}">Length</th>
+                        <th th:if="${collection == 'fs.files'}">Upload Date</th>
 
-                <!-- Special handling for backups collection -->
-                <td th:if="${collection == 'backups'}" th:text="${doc.data.get('startDate')}"></td>
-                <td th:if="${collection == 'backups'}" th:text="${doc.data.get('endDate')}"></td>
-                <td th:if="${collection == 'backups'}" th:text="${doc.data.get('removeRequest')}"></td>
+                        <!-- For other collections or generic fields -->
+                        <th th:if="${collection != 'projects' && collection != 'backups' && collection != 'fs.files'}">Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="doc : ${documents}">
+                        <td th:text="${doc.id}"></td>
 
-                <!-- Special handling for fs.files collection (GridFS) -->
-                <td th:if="${collection == 'fs.files'}" th:text="${doc.data.get('filename')}"></td>
-                <td th:if="${collection == 'fs.files'}" th:text="${doc.data.get('length')}"></td>
-                <td th:if="${collection == 'fs.files'}" th:text="${doc.data.get('uploadDate')}"></td>
+                        <!-- Special handling for projects collection -->
+                        <td th:if="${collection == 'projects'}" th:text="${doc.data.get('name')}"></td>
+                        <td th:if="${collection == 'projects'}">
+                            <ul th:if="${doc.data.get('backupIds') != null}">
+                                <li th:each="backupId : ${doc.data.get('backupIds')}" th:text="${backupId}"></li>
+                            </ul>
+                        </td>
 
-                <!-- For other collections or generic fields -->
-                <td th:if="${collection != 'projects' && collection != 'backups' && collection != 'fs.files'}">
-                    <pre th:text="${doc.data}"></pre>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                        <!-- Special handling for backups collection -->
+                        <td th:if="${collection == 'backups'}" th:text="${doc.data.get('startDate')}"></td>
+                        <td th:if="${collection == 'backups'}" th:text="${doc.data.get('endDate')}"></td>
+                        <td th:if="${collection == 'backups'}" th:text="${doc.data.get('removeRequest')}"></td>
 
-    <p th:if="${#lists.isEmpty(documents)}">No documents found in this collection.</p>
+                        <!-- Special handling for fs.files collection (GridFS) -->
+                        <td th:if="${collection == 'fs.files'}" th:text="${doc.data.get('filename')}"></td>
+                        <td th:if="${collection == 'fs.files'}" th:text="${doc.data.get('length')}"></td>
+                        <td th:if="${collection == 'fs.files'}" th:text="${doc.data.get('uploadDate')}"></td>
 
-    <p><a th:href="@{/collections(database=${database})}">Back to Collections</a></p>
+                        <!-- For other collections or generic fields -->
+                        <td th:if="${collection != 'projects' && collection != 'backups' && collection != 'fs.files'}">
+                            <pre th:text="${doc.data}"></pre>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p th:if="${#lists.isEmpty(documents)}">No documents found in this collection.</p>
+        </div>
+    </div>
 </body>
 </html>

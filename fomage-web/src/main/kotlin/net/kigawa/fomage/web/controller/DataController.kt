@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
+import java.security.Principal
 
 /**
  * Controller for data viewing and management pages.
@@ -19,9 +20,10 @@ class DataController(private val apiClientService: ApiClientService) {
      * Shows the database list page.
      */
     @GetMapping("/")
-    fun showDatabaseList(model: Model): String {
+    fun showDatabaseList(model: Model, principal: Principal): String {
         val databases = apiClientService.getDatabases()
         model.addAttribute("databases", databases)
+        model.addAttribute("username", principal.name)
         return "data/list"
     }
 
@@ -29,10 +31,11 @@ class DataController(private val apiClientService: ApiClientService) {
      * Shows the collection list page.
      */
     @GetMapping("/collections")
-    fun showCollectionList(@RequestParam database: String, model: Model): String {
+    fun showCollectionList(@RequestParam database: String, model: Model, principal: Principal): String {
         val collections = apiClientService.getCollections(database)
         model.addAttribute("database", database)
         model.addAttribute("collections", collections)
+        model.addAttribute("username", principal.name)
         return "data/collections"
     }
 
@@ -43,13 +46,14 @@ class DataController(private val apiClientService: ApiClientService) {
     fun showDocumentList(
         @RequestParam database: String,
         @RequestParam collection: String,
-        model: Model
+        model: Model,
+        principal: Principal
     ): String {
         // Handle special collections with specific models
         if (collection == "users") {
-            return showUserList(model)
+            return showUserList(model, principal)
         } else if (collection == "data") {
-            return showDataList(model)
+            return showDataList(model, principal)
         }
 
         // For other collections, use generic documents
@@ -57,6 +61,7 @@ class DataController(private val apiClientService: ApiClientService) {
         model.addAttribute("database", database)
         model.addAttribute("collection", collection)
         model.addAttribute("documents", documents)
+        model.addAttribute("username", principal.name)
         return "data/documents"
     }
 
@@ -68,7 +73,8 @@ class DataController(private val apiClientService: ApiClientService) {
         @RequestParam database: String,
         @RequestParam collection: String,
         @PathVariable id: String,
-        model: Model
+        model: Model,
+        principal: Principal
     ): String {
         val document = apiClientService.getDocumentById(database, collection, id)
             ?: throw IllegalArgumentException("Document not found with ID: $id")
@@ -76,6 +82,7 @@ class DataController(private val apiClientService: ApiClientService) {
         model.addAttribute("database", database)
         model.addAttribute("collection", collection)
         model.addAttribute("document", document)
+        model.addAttribute("username", principal.name)
         return "data/document-detail"
     }
 
@@ -86,11 +93,13 @@ class DataController(private val apiClientService: ApiClientService) {
     fun showDocumentCreationForm(
         @RequestParam database: String,
         @RequestParam collection: String,
-        model: Model
+        model: Model,
+        principal: Principal
     ): String {
         model.addAttribute("database", database)
         model.addAttribute("collection", collection)
         model.addAttribute("document", GenericDocument())
+        model.addAttribute("username", principal.name)
         return "data/document-form"
     }
 
@@ -117,7 +126,8 @@ class DataController(private val apiClientService: ApiClientService) {
         @RequestParam database: String,
         @RequestParam collection: String,
         @PathVariable id: String,
-        model: Model
+        model: Model,
+        principal: Principal
     ): String {
         val document = apiClientService.getDocumentById(database, collection, id)
             ?: throw IllegalArgumentException("Document not found with ID: $id")
@@ -125,6 +135,7 @@ class DataController(private val apiClientService: ApiClientService) {
         model.addAttribute("database", database)
         model.addAttribute("collection", collection)
         model.addAttribute("document", document)
+        model.addAttribute("username", principal.name)
         return "data/document-form"
     }
 
@@ -163,9 +174,10 @@ class DataController(private val apiClientService: ApiClientService) {
      * Shows the user list page.
      */
     @GetMapping("/users")
-    fun showUserList(model: Model): String {
+    fun showUserList(model: Model, principal: Principal): String {
         val users = apiClientService.getUsers()
         model.addAttribute("users", users)
+        model.addAttribute("username", principal.name)
         return "data/users"
     }
 
@@ -173,11 +185,12 @@ class DataController(private val apiClientService: ApiClientService) {
      * Shows the user detail page.
      */
     @GetMapping("/users/{id}")
-    fun showUserDetail(@PathVariable id: String, model: Model): String {
+    fun showUserDetail(@PathVariable id: String, model: Model, principal: Principal): String {
         val user = apiClientService.getUserById(id)
             ?: throw IllegalArgumentException("User not found with ID: $id")
 
         model.addAttribute("user", user)
+        model.addAttribute("username", principal.name)
         return "data/user-detail"
     }
 
@@ -185,8 +198,9 @@ class DataController(private val apiClientService: ApiClientService) {
      * Shows the user creation page.
      */
     @GetMapping("/users/new")
-    fun showUserCreationForm(model: Model): String {
+    fun showUserCreationForm(model: Model, principal: Principal): String {
         model.addAttribute("user", User())
+        model.addAttribute("username", principal.name)
         return "data/user-form"
     }
 
@@ -204,11 +218,12 @@ class DataController(private val apiClientService: ApiClientService) {
      * Shows the user edit page.
      */
     @GetMapping("/users/{id}/edit")
-    fun showUserEditForm(@PathVariable id: String, model: Model): String {
+    fun showUserEditForm(@PathVariable id: String, model: Model, principal: Principal): String {
         val user = apiClientService.getUserById(id)
             ?: throw IllegalArgumentException("User not found with ID: $id")
 
         model.addAttribute("user", user)
+        model.addAttribute("username", principal.name)
         return "data/user-form"
     }
 
@@ -240,9 +255,10 @@ class DataController(private val apiClientService: ApiClientService) {
      * Shows the data list page.
      */
     @GetMapping("/data")
-    fun showDataList(model: Model): String {
+    fun showDataList(model: Model, principal: Principal): String {
         val dataList = apiClientService.getData()
         model.addAttribute("dataList", dataList)
+        model.addAttribute("username", principal.name)
         return "data/data"
     }
 
@@ -250,11 +266,12 @@ class DataController(private val apiClientService: ApiClientService) {
      * Shows the data detail page.
      */
     @GetMapping("/data/{id}")
-    fun showDataDetail(@PathVariable id: String, model: Model): String {
+    fun showDataDetail(@PathVariable id: String, model: Model, principal: Principal): String {
         val data = apiClientService.getDataById(id)
             ?: throw IllegalArgumentException("Data not found with ID: $id")
 
         model.addAttribute("data", data)
+        model.addAttribute("username", principal.name)
         return "data/data-detail"
     }
 
@@ -262,8 +279,9 @@ class DataController(private val apiClientService: ApiClientService) {
      * Shows the data creation page.
      */
     @GetMapping("/data/new")
-    fun showDataCreationForm(model: Model): String {
+    fun showDataCreationForm(model: Model, principal: Principal): String {
         model.addAttribute("data", Data())
+        model.addAttribute("username", principal.name)
         return "data/data-form"
     }
 
@@ -281,11 +299,12 @@ class DataController(private val apiClientService: ApiClientService) {
      * Shows the data edit page.
      */
     @GetMapping("/data/{id}/edit")
-    fun showDataEditForm(@PathVariable id: String, model: Model): String {
+    fun showDataEditForm(@PathVariable id: String, model: Model, principal: Principal): String {
         val data = apiClientService.getDataById(id)
             ?: throw IllegalArgumentException("Data not found with ID: $id")
 
         model.addAttribute("data", data)
+        model.addAttribute("username", principal.name)
         return "data/data-form"
     }
 
