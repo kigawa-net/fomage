@@ -1,0 +1,3 @@
+[submodule "fonsole-doc"]
+	path = fonsole-doc
+	url = https://github.com/kigawa-net/fonsole-doc.git
