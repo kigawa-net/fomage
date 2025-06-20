@@ -8,8 +8,10 @@ dokka = "1.9.20"
 vanniktech-maven-publish = "0.29.0"
 mongodb-version="5.3.1"
 dotenv-version="6.5.1"
-logback-version="1.5.17"
+logback-version="1.4.14"
 shadow-version="8.1.1"
+spring-boot-version="3.2.0"
+spring-dependency-management-version="1.1.4"
 
 [libraries]
 kotlin-stdlib-js = { module = "org.jetbrains.kotlin:kotlin-stdlib-js", version.ref = "kotlin-version" }
@@ -24,7 +26,16 @@ mongodb-driver = { module = "org.mongodb:mongodb-driver-kotlin-coroutine", versi
 mongodb-bson = { module = "org.mongodb:bson-kotlinx", version.ref = "mongodb-version" }
 dotenv = { module = "io.github.cdimascio:dotenv-kotlin", version.ref = "dotenv-version" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback-version" }
+logback-core = { module = "ch.qos.logback:logback-core", version.ref = "logback-version" }
 
+# Spring Boot
+spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot-version" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot-version" }
+spring-boot-starter-data-mongodb = { module = "org.springframework.boot:spring-boot-starter-data-mongodb", version.ref = "spring-boot-version" }
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "spring-boot-version" }
+spring-boot-starter-thymeleaf = { module = "org.springframework.boot:spring-boot-starter-thymeleaf", version.ref = "spring-boot-version" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot-version" }
+thymeleaf-extras-springsecurity = { module = "org.thymeleaf.extras:thymeleaf-extras-springsecurity6", version = "3.1.2.RELEASE" }
 
 [plugins]
 sonatype-central-upload = { id = "cl.franciscosolis.sonatype-central-upload", version = "1.0.3" }
@@ -32,3 +43,5 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech-maven-publish" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow-version" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot-version" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management-version" }
