@@ -11,6 +11,7 @@ repositories {
 dependencies {
     // Module dependencies
     implementation(project(":fomage-api"))
+    implementation(project(":fomage-core"))
 
     // Kotlin standard library
     implementation(libs.kotlin.stdlib)

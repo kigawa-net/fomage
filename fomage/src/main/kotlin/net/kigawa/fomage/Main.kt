@@ -4,6 +4,9 @@ import net.kigawa.fomage.api.DataManagerApi
 import net.kigawa.fomage.api.MonitoringManagerApi
 import net.kigawa.fomage.api.SchemaManagerApi
 import net.kigawa.fomage.api.TaskManagerApi
+import net.kigawa.fomage.core.model.GenericDocument
+import net.kigawa.fomage.core.model.User
+import net.kigawa.fomage.core.model.Data
 import com.sun.net.httpserver.HttpServer
 import com.sun.net.httpserver.HttpHandler
 import com.sun.net.httpserver.HttpExchange
@@ -234,10 +237,10 @@ object Main {
                     <h1>Documents in $collection</h1>
                     <table>
                         <tr>
-                            ${if (documents.isNotEmpty()) documents.first().keys.joinToString("") { "<th>$it</th>" } else ""}
+                            ${if (documents.isNotEmpty()) documents.first().data.keys.joinToString("") { "<th>$it</th>" } else ""}
                         </tr>
                         ${documents.joinToString("") { doc ->
-                            "<tr>" + doc.values.joinToString("") { "<td>$it</td>" } + "</tr>"
+                            "<tr>" + doc.data.values.joinToString("") { "<td>$it</td>" } + "</tr>"
                         }}
                     </table>
                     <p><a href="/collections?database=$database">Back to Collections</a> | <a href="/">Back to Home</a></p>
@@ -428,12 +431,74 @@ class DataManager(private val mongoClient: Any) : DataManagerApi {
     /**
      * Finds documents in a collection.
      */
-    override fun findDocuments(database: String, collection: String): List<Map<String, Any>> {
+    override fun findDocuments(database: String, collection: String): List<GenericDocument> {
         // TODO: Implement document finding
-        return (mongoClient as DummyMongoClient)
+        val rawDocuments = (mongoClient as DummyMongoClient)
             .getDatabase(database)
             .getCollection(collection)
             .find()
+
+        return rawDocuments.map { rawDoc ->
+            val doc = GenericDocument()
+            doc.id = rawDoc["_id"]?.toString()
+            doc.collection = collection
+            doc.data = rawDoc
+            doc.createdAt = java.time.Instant.now()
+            doc.updatedAt = java.time.Instant.now()
+            doc
+        }
+    }
+
+    /**
+     * Finds all users.
+     * 
+     * @return A list of all users
+     */
+    override fun findAllUsers(): List<User> {
+        // TODO: Implement user finding
+        return listOf(
+            User().apply {
+                id = "1"
+                name = "John Doe"
+                email = "john@example.com"
+                createdAt = java.time.Instant.now()
+                updatedAt = java.time.Instant.now()
+            },
+            User().apply {
+                id = "2"
+                name = "Jane Smith"
+                email = "jane@example.com"
+                createdAt = java.time.Instant.now()
+                updatedAt = java.time.Instant.now()
+            }
+        )
+    }
+
+    /**
+     * Finds all data documents.
+     * 
+     * @return A list of all data documents
+     */
+    override fun findAllData(): List<Data> {
+        // TODO: Implement data finding
+        return listOf(
+            Data().apply {
+                id = "1"
+                type = "document"
+                content = "Sample content 1"
+                userId = "1"
+                createdAt = java.time.Instant.now()
+                updatedAt = java.time.Instant.now()
+            },
+            Data().apply {
+                id = "2"
+                type = "image"
+                content = "Sample content 2"
+                userId = "2"
+                createdAt = java.time.Instant.now()
+                updatedAt = java.time.Instant.now()
+            }
+        )
     }
 }
 

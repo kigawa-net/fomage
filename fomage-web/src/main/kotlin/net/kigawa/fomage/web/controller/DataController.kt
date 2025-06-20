@@ -42,10 +42,38 @@ class DataController(private val apiClientService: ApiClientService) {
         @RequestParam collection: String,
         model: Model
     ): String {
+        // Handle special collections with specific models
+        if (collection == "users") {
+            return showUserList(model)
+        } else if (collection == "data") {
+            return showDataList(model)
+        }
+
+        // For other collections, use generic documents
         val documents = apiClientService.getDocuments(database, collection)
         model.addAttribute("database", database)
         model.addAttribute("collection", collection)
         model.addAttribute("documents", documents)
         return "data/documents"
+    }
+
+    /**
+     * Shows the user list page.
+     */
+    @GetMapping("/users")
+    fun showUserList(model: Model): String {
+        val users = apiClientService.getUsers()
+        model.addAttribute("users", users)
+        return "data/users"
+    }
+
+    /**
+     * Shows the data list page.
+     */
+    @GetMapping("/data")
+    fun showDataList(model: Model): String {
+        val dataList = apiClientService.getData()
+        model.addAttribute("dataList", dataList)
+        return "data/data"
     }
 }

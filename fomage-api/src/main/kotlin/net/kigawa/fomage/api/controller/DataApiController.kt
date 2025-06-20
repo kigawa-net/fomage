@@ -1,6 +1,9 @@
 package net.kigawa.fomage.api.controller
 
 import net.kigawa.fomage.api.service.DataService
+import net.kigawa.fomage.core.model.Data
+import net.kigawa.fomage.core.model.GenericDocument
+import net.kigawa.fomage.core.model.User
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -36,7 +39,23 @@ class DataApiController(private val dataService: DataService) {
     fun findDocuments(
         @RequestParam database: String,
         @RequestParam collection: String
-    ): List<Map<String, Any>> {
+    ): List<GenericDocument> {
         return dataService.findDocuments(database, collection)
+    }
+
+    /**
+     * Finds all users.
+     */
+    @GetMapping("/users")
+    fun findAllUsers(): List<User> {
+        return dataService.findAllUsers()
+    }
+
+    /**
+     * Finds all data documents.
+     */
+    @GetMapping("/data")
+    fun findAllData(): List<Data> {
+        return dataService.findAllData()
     }
 }

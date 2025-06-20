@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'Documents in ' + ${collection} + ' - Fomage'"></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+        h1 { color: #2c3e50; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f1f1; }
+        a { color: #3498db; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <h1 th:text="'Documents in ' + ${collection}"></h1>
+
+    <!-- Display documents in a table -->
+    <table th:if="${not #lists.isEmpty(documents)}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <!-- Special columns for projects collection -->
+                <th th:if="${collection == 'projects'}">Name</th>
+                <th th:if="${collection == 'projects'}">Backup IDs</th>
+
+                <!-- Special columns for backups collection -->
+                <th th:if="${collection == 'backups'}">Start Date</th>
+                <th th:if="${collection == 'backups'}">End Date</th>
+                <th th:if="${collection == 'backups'}">Remove Request</th>
+
+                <!-- Special columns for fs.files collection (GridFS) -->
+                <th th:if="${collection == 'fs.files'}">Filename</th>
+                <th th:if="${collection == 'fs.files'}">Length</th>
+                <th th:if="${collection == 'fs.files'}">Upload Date</th>
+
+                <!-- For other collections or generic fields -->
+                <th th:if="${collection != 'projects' && collection != 'backups' && collection != 'fs.files'}">Data</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="doc : ${documents}">
+                <td th:text="${doc.id}"></td>
+
+                <!-- Special handling for projects collection -->
+                <td th:if="${collection == 'projects'}" th:text="${doc.data.get('name')}"></td>
+                <td th:if="${collection == 'projects'}">
+                    <ul th:if="${doc.data.get('backupIds') != null}">
+                        <li th:each="backupId : ${doc.data.get('backupIds')}" th:text="${backupId}"></li>
+                    </ul>
+                </td>
+
+                <!-- Special handling for backups collection -->
+                <td th:if="${collection == 'backups'}" th:text="${doc.data.get('startDate')}"></td>
+                <td th:if="${collection == 'backups'}" th:text="${doc.data.get('endDate')}"></td>
+                <td th:if="${collection == 'backups'}" th:text="${doc.data.get('removeRequest')}"></td>
+
+                <!-- Special handling for fs.files collection (GridFS) -->
+                <td th:if="${collection == 'fs.files'}" th:text="${doc.data.get('filename')}"></td>
+                <td th:if="${collection == 'fs.files'}" th:text="${doc.data.get('length')}"></td>
+                <td th:if="${collection == 'fs.files'}" th:text="${doc.data.get('uploadDate')}"></td>
+
+                <!-- For other collections or generic fields -->
+                <td th:if="${collection != 'projects' && collection != 'backups' && collection != 'fs.files'}">
+                    <pre th:text="${doc.data}"></pre>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p th:if="${#lists.isEmpty(documents)}">No documents found in this collection.</p>
+
+    <p><a th:href="@{/collections(database=${database})}">Back to Collections</a></p>
+</body>
+</html>
