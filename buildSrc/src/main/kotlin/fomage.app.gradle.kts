@@ -1,6 +1,4 @@
 plugins {
-//    application
+    id("fomage.common")
+    application
 }
-//application {
-//    mainClass.set("net.kigawa.fomage.Main")
-//}

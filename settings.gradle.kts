@@ -13,4 +13,6 @@ dependencyResolutionManagement {
 rootProject.name = "fomage"
 
 include(":fomage-api")
+include(":fomage-core")
+include(":fomage-web")
 include(":fomage")
