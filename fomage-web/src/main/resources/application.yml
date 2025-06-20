@@ -1,0 +1,31 @@
+# Fomage Web Configuration
+
+# Web settings
+web:
+  title: ${WEB_TITLE:Fomage - MongoDB Management}
+  theme: ${WEB_THEME:default}
+  max-upload-size: ${MAX_FILE_SIZE:10}MB
+  allowed-file-types: ${ALLOWED_FILE_TYPES:jpg,jpeg,png,gif,pdf,doc,docx}
+  upload-directory: ${UPLOAD_DIRECTORY:uploads}
+
+# Thymeleaf settings
+spring:
+  thymeleaf:
+    cache: ${THYMELEAF_CACHE:false}
+    mode: HTML
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
+
+# Security settings for web
+fomage:
+  security:
+    enabled: ${SECURITY_ENABLED:true}
+    remember-me:
+      enabled: ${REMEMBER_ME_ENABLED:true}
+      token-validity: ${REMEMBER_ME_VALIDITY:2592000}  # 30 days in seconds
+
+# Logging configuration specific to web
+logging:
+  level:
+    net.kigawa.fomage.web: ${LOG_LEVEL:INFO}

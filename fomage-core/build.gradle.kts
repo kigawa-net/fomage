@@ -21,6 +21,9 @@ dependencies {
     implementation(libs.mongodb.driver)
     implementation(libs.mongodb.bson)
 
+    // Environment configuration
+    implementation(libs.dotenv)
+
     // Testing
     testImplementation(libs.kotlin.test)
     testImplementation(libs.kotlin.test.junit)

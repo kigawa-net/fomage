@@ -6,24 +6,20 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.beans.factory.annotation.Value
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
+import org.springframework.core.env.Environment
 
 /**
  * MongoDB configuration for the Fomage application.
  */
 @Configuration
 @EnableMongoRepositories(basePackages = ["net.kigawa.fomage.core.repository"])
-open class MongoConfig : AbstractMongoClientConfiguration() {
-
-    @Value("\${spring.data.mongodb.uri:mongodb://localhost:27017/fonsole}")
-    private lateinit var mongoUri: String
-
-    @Value("\${spring.data.mongodb.database:fonsole}")
-    private lateinit var mongoDatabaseName: String
+open class MongoConfig(private val env: Environment) : AbstractMongoClientConfiguration() {
 
     /**
      * Creates a MongoClient using the configured URI.
      */
     override fun mongoClient(): MongoClient {
+        val mongoUri = env.getProperty("MONGODB_URI", "mongodb://localhost:27017")
         return MongoClients.create(mongoUri)
     }
 
@@ -31,6 +27,6 @@ open class MongoConfig : AbstractMongoClientConfiguration() {
      * Returns the name of the database to use.
      */
     override fun getDatabaseName(): String {
-        return mongoDatabaseName
+        return env.getProperty("MONGODB_DATABASE", "fomage")
     }
 }
