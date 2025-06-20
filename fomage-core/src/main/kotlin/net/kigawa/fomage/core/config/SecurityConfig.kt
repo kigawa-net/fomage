@@ -33,7 +33,7 @@ open class SecurityConfig(private val env: Environment) {
         http.csrf { it.disable() }
             .authorizeHttpRequests { auth ->
                 auth.requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
-                    .requestMatchers("/login", "/error").permitAll()
+                    .requestMatchers("/login", "/error", "/health").permitAll()
                     .requestMatchers("/api/**").authenticated()
                     .anyRequest().authenticated()
             }
