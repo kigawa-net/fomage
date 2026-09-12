@@ -11,24 +11,29 @@ COPY gradle/ gradle/
 COPY build.gradle.kts gradle.properties gradlew gradlew.bat settings.gradle.kts ./
 COPY buildSrc/ buildSrc/
 
-# 依存関係をダウンロード（キャッシュを活用）
-RUN gradle dependencies --no-daemon
-
-# ソースコードとビルドファイルをコピー
-COPY fomage/src/ fomage/src/
+# settings.gradle.ktsが参照する各サブプロジェクトのディレクトリを
+# build.gradle.ktsだけ先にコピーしておく(依存関係解決にはディレクトリの実在が必要)
 COPY fomage/build.gradle.kts fomage/
-COPY fomage-api/src/ fomage-api/src/
 COPY fomage-api/build.gradle.kts fomage-api/
-COPY fomage-core/src/ fomage-core/src/
 COPY fomage-core/build.gradle.kts fomage-core/
-COPY fomage-web/src/ fomage-web/src/
 COPY fomage-web/build.gradle.kts fomage-web/
 
+# 依存関係をダウンロード（キャッシュを活用）
+# gradle-wrapper.propertiesで固定されたバージョンを使うため、
+# イメージ同梱のgradleではなく./gradlewを使用する
+RUN ./gradlew dependencies --no-daemon
+
+# ソースコードをコピー
+COPY fomage/src/ fomage/src/
+COPY fomage-api/src/ fomage-api/src/
+COPY fomage-core/src/ fomage-core/src/
+COPY fomage-web/src/ fomage-web/src/
+
 # アプリケーションをビルド
-RUN gradle bootJar --no-daemon
+RUN ./gradlew bootJar --no-daemon
 
 # 実行ステージ
-FROM openjdk:21-slim
+FROM eclipse-temurin:21-jre-jammy
 
 # メタデータを設定
 LABEL maintainer="kigawa01"
