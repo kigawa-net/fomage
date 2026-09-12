@@ -5,6 +5,7 @@ FomageはKotlinで開発されたMongoDBベースのアプリケーションで�
 ## 📋 目次
 
 - [概要](#概要)
+- [アクセスURL](#アクセスurl)
 - [機能](#機能)
 - [技術スタック](#技術スタック)
 - [セットアップ](#セットアップ)
@@ -18,6 +19,14 @@ FomageはKotlinで開発されたMongoDBベースのアプリケーションで�
 ## 概要
 
 Fomageは、MongoDBを使用したデータ処理と管理を行うKotlinアプリケーションです。コルーチンを使用した非同期処理により、効率的なデータ操作を実現します。
+
+## アクセスURL
+
+| 環境 | URL | デプロイ契機 | DB |
+|---|---|---|---|
+| dev | https://fomage-dev.kigawa.net | PRの作成・更新 | dev専用のダミーMongoDB |
+| stg | https://fomage-stg.kigawa.net | `main`へのpush | stg専用のMongoDB(本番データの一部を投入) |
+| prod | https://fomage.kigawa.net | `main`上でのworkflow_dispatch(手動実行) | 本番のfonsole MongoDB |
 
 ## 機能
 
